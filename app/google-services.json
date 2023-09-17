@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234842024490",
+    "project_id": "roomchat-a2845",
+    "storage_bucket": "roomchat-a2845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234842024490:android:709e4e8c3132795d397153",
+        "android_client_info": {
+          "package_name": "com.example.roomchatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSLn28gVeyn5icWUYc6M5aB1dM5K8IK9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
