@@ -2,12 +2,16 @@ package com.example.roomchatapp.ui.register
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.roomchatapp.ui.ViewError
+import com.example.roomchatapp.ui.Message
+import com.example.roomchatapp.ui.SessionProvider
+import com.example.roomchatapp.ui.SingleLiveEvent
+import com.example.roomchatapp.ui.firestoreDB.UsersDao
+import com.example.roomchatapp.ui.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class RegisterViewModel : ViewModel() {
-    val errorLiveData = MutableLiveData<ViewError>()
+    val messageLiveData = SingleLiveEvent<Message>()
     val isLoading = MutableLiveData<Boolean>()
     val name = MutableLiveData<String>("Ahmed Hisham")
     val email = MutableLiveData<String>("a.hisham.desoky@gmail.com")
@@ -18,6 +22,8 @@ class RegisterViewModel : ViewModel() {
     val emailError = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
     val passwordConfirmError = MutableLiveData<String>()
+
+    val events = SingleLiveEvent<RegisterViewEvents>()
 
     //    val auth = FirebaseAuth.getInstance()
     private val auth = Firebase.auth
@@ -65,18 +71,13 @@ class RegisterViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    isLoading.postValue(false)
-                    // show message
-                    errorLiveData.postValue(
-                        ViewError(
-                            message = task.result.user?.uid
-                        )
-                    )
+                    //add to the db
+                    addUserToFireStoreDB(task.result.user?.uid)
                 } else {
                     // show error message
                     isLoading.postValue(false)
-                    errorLiveData.postValue(
-                        ViewError(
+                    messageLiveData.postValue(
+                        Message(
                             message = task.exception?.localizedMessage
                         )
                     )
@@ -84,5 +85,46 @@ class RegisterViewModel : ViewModel() {
 
             }
 
+    }
+
+    private fun addUserToFireStoreDB(uid: String?) {
+        val user = User(
+            id = uid,
+            userName = name.value,
+            userEmail = email.value
+        )
+
+        UsersDao.createUser(user) { task ->
+            isLoading.postValue(false)
+            if (task.isSuccessful) {
+                messageLiveData.postValue(
+                    Message(
+                        message = "User registered successfully!",
+                        posActionName = "Ok",
+                        posActionClick = {
+                            // save user
+                            SessionProvider.user = user
+                            // navigate
+                            events.postValue(RegisterViewEvents.NavigateToHome)
+
+                        }
+                    )
+                )
+            } else {
+                //show error message
+                messageLiveData.postValue(
+                    Message(
+                        message = task.exception?.localizedMessage,
+
+                        )
+                )
+            }
+
+        }
+
+    }
+
+    fun navigateToLogin() {
+        events.postValue(RegisterViewEvents.NavigateToLogin)
     }
 }

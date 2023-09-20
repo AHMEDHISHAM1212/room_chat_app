@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.roomchatapp.R
 import com.example.roomchatapp.databinding.ActivityRegisterBinding
+import com.example.roomchatapp.ui.home.HomeActivity
 import com.example.roomchatapp.ui.login.LoginActivity
 import com.example.roomchatapp.ui.showDialog
 
@@ -23,16 +24,42 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun subscribeToLiveData() {
 
-        viewModel.errorLiveData.observe(this) { message ->
-            showDialog(message = message.message ?: "Some thing went wrong ",
-                posActionName = "OK",
-                posAction = { dialog, i ->
-                    dialog.dismiss()
-                }
-
+        viewModel.messageLiveData.observe(this) { message ->
+            showDialog(
+                message = message.message ?: "Some thing went wrong ",
+                posActionName = "Ok",
+                posAction = message.posActionClick,
+                negActionName = message.negActionName,
+                negAction = message.negActionClick,
+                isCancelable = message.isCancelable
             )
         }
 
+        viewModel.events.observe(this, ::handelEvents)
+
+    }
+
+    private fun handelEvents(events: RegisterViewEvents?) {
+        when (events) {
+            RegisterViewEvents.NavigateToHome ->
+                navigateToHome()
+
+            RegisterViewEvents.NavigateToLogin ->
+                navigateToLogin()
+
+            else -> {}
+        }
+
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 
     private fun initViews() {
@@ -45,11 +72,6 @@ class RegisterActivity : AppCompatActivity() {
         viewBinding.lifecycleOwner = this
         viewBinding.vm = viewModel
 
-        viewBinding.contentRegister
-            .tvCreateAnAccount
-            .setOnClickListener {
-                startActivity(Intent(this, LoginActivity::class.java))
-            }
 
     }
 }

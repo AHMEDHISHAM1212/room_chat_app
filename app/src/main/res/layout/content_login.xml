@@ -131,6 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:onClick="@{()->vm.navigateToRegister()}"
             android:text="@string/or_create_an_account"
             android:textSize="16sp" />
     </LinearLayout>
