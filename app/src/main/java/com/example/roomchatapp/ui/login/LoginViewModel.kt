@@ -2,21 +2,27 @@ package com.example.roomchatapp.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.roomchatapp.ui.ViewError
+import com.example.roomchatapp.ui.Message
+import com.example.roomchatapp.ui.SessionProvider
+import com.example.roomchatapp.ui.SingleLiveEvent
+import com.example.roomchatapp.ui.firestoreDB.UsersDao
+import com.example.roomchatapp.ui.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class LoginViewModel : ViewModel() {
-    val errorLiveData = MutableLiveData<ViewError>()
+    val messageLiveData = SingleLiveEvent<Message>()
     val isLoading = MutableLiveData<Boolean>()
-    
+
     val email = MutableLiveData<String>("a.hisham.desoky@gmail.com")
     val password = MutableLiveData<String>("")
 
     val emailError = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
 
-    val auth = Firebase.auth
+    val events = SingleLiveEvent<LoginViewEvents>()
+
+    private val auth = Firebase.auth
 
 
     private fun validForm(): Boolean {
@@ -46,20 +52,46 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // show message is i
-                    isLoading.postValue(false)
-                    errorLiveData.postValue(
-                        ViewError(
-                            message = task.result.user?.uid
-                        )
-                    )
+                    getUserFromFireStore(task.result.user?.uid)
                 } else {
                     isLoading.postValue(false)
-                    errorLiveData.postValue(
-                        ViewError(
+                    messageLiveData.postValue(
+                        Message(
                             message = task.exception?.localizedMessage
                         )
                     )
                 }
             }
+    }
+
+    private fun getUserFromFireStore(uid: String?) {
+        UsersDao
+            .getUser(uid) { task ->
+                isLoading.value = false
+                if (task.isSuccessful) {
+                    val user = task.result.toObject(User::class.java)
+                    // save
+                    SessionProvider.user = user
+                    //show dialog and navigate
+                    messageLiveData.postValue(
+                        Message(
+                            message = "Logged in successfully",
+                            posActionName = "Ok",
+                            posActionClick = {
+                                //navigate to home
+                                events.postValue(LoginViewEvents.NavigateToHome)
+                            },
+                            isCancelable = false
+                        )
+                    )
+                }
+
+
+            }
+
+    }
+
+    fun navigateToRegister() {
+        events.postValue(LoginViewEvents.NavigateToRegister)
     }
 }

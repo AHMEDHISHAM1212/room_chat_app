@@ -9,4 +9,6 @@
     <string name="full_name">Full name</string>
     <string name="password_confirmation">Password Confirmation</string>
     <string name="already_have_an_account">Already have an account!</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="next">next</string>
 </resources>
