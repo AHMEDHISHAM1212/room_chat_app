@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.roomchatapp.R
-import com.example.roomchatapp.ui.register.RegisterActivity
+import com.example.roomchatapp.ui.login.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
             .postDelayed({
                 startActivity(
                     Intent(
-                        this, RegisterActivity::class.java
+                        this, LoginActivity::class.java
                     )
                 )
                 finish()

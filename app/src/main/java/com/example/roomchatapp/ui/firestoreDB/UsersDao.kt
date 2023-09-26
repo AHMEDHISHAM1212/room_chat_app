@@ -11,7 +11,7 @@ object UsersDao {
 
     private fun getUsersCollection(): CollectionReference {
         val fireStore = Firebase.firestore
-        return fireStore.collection("Users")
+        return fireStore.collection(User.CollectionName)
     }
 
     fun createUser(user: User, onCompleteListener: OnCompleteListener<Void>) {
@@ -21,7 +21,10 @@ object UsersDao {
             .addOnCompleteListener(onCompleteListener)
     }
 
-    fun getUser(userID: String?, onCompleteListener: OnCompleteListener<DocumentSnapshot>) {
+    fun getUser(
+        userID: String?,
+        onCompleteListener: OnCompleteListener<DocumentSnapshot>
+    ) {
         getUsersCollection()
             .document(userID ?: "")
             .get()

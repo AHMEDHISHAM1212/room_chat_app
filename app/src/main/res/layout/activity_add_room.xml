@@ -7,7 +7,8 @@
 
         <variable
             name="vm"
-            type="com.example.roomchatapp.ui.home.HomeViewModel" />
+            type="com.example.roomchatapp.ui.addRoom.AddRoomViewModel" />
+
 
     </data>
 
@@ -16,7 +17,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_main"
         android:elevation="24dp"
-        tools:context=".ui.home.HomeActivity">
+        tools:context=".ui.addRoom.AddRoomActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/home"
+                    android:text="@string/app_name"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -41,20 +42,10 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="12dp"
-            android:backgroundTint="@color/primary_color"
-            android:contentDescription="@string/add_room"
-            android:onClick="@{()->vm.navigateToCreateARoomActivity()}"
-            android:src="@drawable/ic_add" />
 
         <include
-            android:id="@+id/content_home"
-            layout="@layout/content_home"
+            android:id="@+id/content_add_room"
+            layout="@layout/content_add_room"
             app:vm="@{vm}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
