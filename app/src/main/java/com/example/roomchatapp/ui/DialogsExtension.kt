@@ -2,6 +2,7 @@ package com.example.roomchatapp.ui
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import androidx.fragment.app.Fragment
 
 fun Fragment.showDialog(
@@ -62,4 +63,15 @@ fun Activity.showDialog(
     val alertDialog = builder.create()
     alertDialog.setCancelable(isCancelable)
     alertDialog.show()
+}
+
+fun Activity.showLoadingProgressBar(
+    message: String,
+    isCancelable: Boolean = true
+): ProgressDialog {
+    val alertDialog = ProgressDialog(this)
+    alertDialog.setMessage(message)
+    alertDialog.setCancelable(isCancelable)
+
+    return alertDialog
 }

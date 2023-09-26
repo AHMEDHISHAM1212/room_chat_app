@@ -2,9 +2,9 @@ package com.example.roomchatapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.roomchatapp.R
 import com.example.roomchatapp.databinding.ActivityLoginBinding
 import com.example.roomchatapp.ui.home.HomeActivity
@@ -13,7 +13,7 @@ import com.example.roomchatapp.ui.showDialog
 
 class LoginActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityLoginBinding
-    lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
         viewBinding = DataBindingUtil
             .setContentView(this, R.layout.activity_login)
 
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+//        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         viewBinding.lifecycleOwner = this
         viewBinding.vm = viewModel

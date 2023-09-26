@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoomChatApp</string>
+    <string name="app_name">Chat App</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -11,4 +11,9 @@
     <string name="already_have_an_account">Already have an account!</string>
     <string name="forget_password">Forget password?</string>
     <string name="next">next</string>
+    <string name="add_room">Add Room</string>
+    <string name="home">Home</string>
+    <string name="enter_room_name">Enter Room Name</string>
+    <string name="create_new_room">Create New Room</string>
+    <string name="enter_room_description">Enter room description</string>
 </resources>
