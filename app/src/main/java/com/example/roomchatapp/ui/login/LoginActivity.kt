@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.roomchatapp.R
 import com.example.roomchatapp.databinding.ActivityLoginBinding
+import com.example.roomchatapp.ui.Message
 import com.example.roomchatapp.ui.home.HomeActivity
 import com.example.roomchatapp.ui.register.RegisterActivity
 import com.example.roomchatapp.ui.showDialog
@@ -22,19 +23,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun subscribeToLiveData() {
-        viewModel.messageLiveData.observe(this) { message ->
-            showDialog(
-                message = message.message ?: "Something went wrong!",
-                posActionName = "Ok",
-                posAction = message.posActionClick,
-                negAction = message.negActionClick,
-                negActionName = message.negActionName,
-                isCancelable = message.isCancelable
-            )
-
-        }
-
+        viewModel.messageLiveData.observe(this, ::handelMessageLiveData)
         viewModel.events.observe(this, ::handelEvents)
+    }
+
+    private fun handelMessageLiveData(message: Message?) {
+        showDialog(
+            message = message?.message ?: "Something went wrong!",
+            posActionName = "Ok",
+            posAction = message?.posActionClick,
+            negAction = message?.negActionClick,
+            negActionName = message?.negActionName,
+            isCancelable = message?.isCancelable ?: true
+        )
+
     }
 
     private fun handelEvents(events: LoginViewEvents?) {

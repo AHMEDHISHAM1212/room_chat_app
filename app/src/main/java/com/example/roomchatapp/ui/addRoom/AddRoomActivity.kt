@@ -28,35 +28,36 @@ class AddRoomActivity : AppCompatActivity() {
     }
 
     private fun subscribeToLiveData() {
-        viewModel.messageLiveData.observe(this) { message ->
-            showDialog(
-                message = message.message ?: "Some thing went wrong ",
-                posActionName = message.posActionName,
-                posAction = message.posActionClick,
-                negActionName = message.negActionName,
-                negAction = message.negActionClick,
-                isCancelable = message.isCancelable
-            )
-        }
+        viewModel.messageLiveData.observe(this, ::handelMessageLiveData)
         viewModel.event.observe(this, ::handelEvents)
         viewModel.loadingLiveData.observe(this, ::handelLoadingEvent)
-
     }
 
-    private var laodingDialog: ProgressDialog? = null
+    private fun handelMessageLiveData(message: Message?) {
+        showDialog(
+            message = message?.message ?: "Some thing went wrong ",
+            posActionName = message?.posActionName,
+            posAction = message?.posActionClick,
+            negActionName = message?.negActionName,
+            negAction = message?.negActionClick,
+            isCancelable = message?.isCancelable ?: true
+        )
+    }
+
+    private var loadingDialog: ProgressDialog? = null
     private fun handelLoadingEvent(message: Message?) {
         if (message == null) {
             //hide
-            laodingDialog?.dismiss()
-            laodingDialog = null
+            loadingDialog?.dismiss()
+            loadingDialog = null
             return
         }
 
-        laodingDialog = showLoadingProgressBar(
+        loadingDialog = showLoadingProgressBar(
             message = message.message ?: "Some thing went wrong ",
             isCancelable = message.isCancelable
         )
-        laodingDialog?.show()
+        loadingDialog?.show()
 
 
     }
